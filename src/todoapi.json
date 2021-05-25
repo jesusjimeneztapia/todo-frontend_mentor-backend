@@ -1,0 +1,257 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "Swagger TODO App",
+		"description": "This is a sample server to-do server.",
+		"contact": {
+			"email": "jesusjimeneztapia456@gmail.com"
+		},
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:8080/api"
+		}
+	],
+	"tags": [
+		{
+			"name": "users",
+			"description": "Operations about users"
+		}
+	],
+	"paths": {
+		"/users": {
+			"post": {
+				"tags": ["users"],
+				"summary": "Create a new user",
+				"operationId": "createUser",
+				"requestBody": {
+					"description": "User object that needs to be created",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#components/schemas/UserRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successfully operation: User created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#components/schemas/UserResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request: Request body is required with the 'username' and 'password' properties",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#components/schemas/ErrorResponse"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Conflict: Username already exists",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				},
+				"x-codegen-request-body-name": "body"
+			}
+		},
+		"/users/login": {
+			"post": {
+				"tags": ["users"],
+				"summary": "Logs user into the system",
+				"operationId": "loginUser",
+				"requestBody": {
+					"description": "User object that needs login",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#components/schemas/UserRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"202": {
+						"description": "Successfully operation: The user is login",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#components/schemas/UserResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request: Request body is required with the 'username' and 'password' properties",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#components/schemas/ErrorResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized: Password is incorrect",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#components/schemas/ErrorResponse"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found: Username doesn't exists",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#components/schemas/ErrorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"User": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"default": "60ac2060beedbb21741f8826"
+					},
+					"username": {
+						"type": "string",
+						"default": "test"
+					},
+					"token": {
+						"type": "string",
+						"default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYWMyMDYwYmVlZGJiMjE3NDFmODgyNiIsInVzZXJuYW1lIjoidGVzdCIsImlhdCI6MTYyMTg5MzIxNiwiZXhwIjoxNjIxOTc5NjE2fQ.oCA8Z2LmfUOLGBDz-tnoKdnRk_XOjr0ASkVEgBCJKUc"
+					}
+				},
+				"xml": {
+					"name": "User"
+				}
+			},
+			"UserRequest": {
+				"type": "object",
+				"properties": {
+					"username": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": ["username", "password"],
+				"xml": {
+					"name": "UserRequest"
+				}
+			},
+			"UserResponse": {
+				"type": "object",
+				"properties": {
+					"data": {
+						"type": "object",
+						"$ref": "#/components/schemas/User"
+					},
+					"date": {
+						"type": "string",
+						"format": "date",
+						"default": "2021-05-24T21:53:36.610+00:00"
+					},
+					"status": {
+						"type": "number",
+						"description": "HTTP status code"
+					}
+				}
+			},
+			"Error": {
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": "Error description"
+					},
+					"title": {
+						"type": "string",
+						"description": "Error title"
+					}
+				}
+			},
+			"ErrorResponse": {
+				"type": "object",
+				"properties": {
+					"data": {
+						"type": "object",
+						"$ref": "#/components/schemas/Error"
+					},
+					"date": {
+						"type": "string",
+						"format": "date",
+						"default": "2021-05-24T21:53:36.610+00:00"
+					},
+					"status": {
+						"type": "number",
+						"description": "HTTP status code"
+					}
+				}
+			},
+			"ApiResponse": {
+				"type": "object",
+				"properties": {
+					"data": {
+						"type": "object"
+					},
+					"date": {
+						"type": "string",
+						"format": "date"
+					},
+					"status": {
+						"type": "number"
+					}
+				}
+			}
+		},
+		"securitySchemes": {
+			"petstore_auth": {
+				"type": "oauth2",
+				"flows": {
+					"implicit": {
+						"authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+						"scopes": {
+							"write:pets": "modify pets in your account",
+							"read:pets": "read your pets"
+						}
+					}
+				}
+			},
+			"api_key": {
+				"type": "apiKey",
+				"name": "api_key",
+				"in": "header"
+			}
+		}
+	}
+}
