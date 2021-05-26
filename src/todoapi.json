@@ -158,10 +158,12 @@
 				"type": "object",
 				"properties": {
 					"username": {
-						"type": "string"
+						"type": "string",
+						"description": "String of minimum 3 characters and maximum 40 characters"
 					},
 					"password": {
-						"type": "string"
+						"type": "string",
+						"description": "String of minimum 8 characters and maximum 64 characters"
 					}
 				},
 				"required": ["username", "password"],

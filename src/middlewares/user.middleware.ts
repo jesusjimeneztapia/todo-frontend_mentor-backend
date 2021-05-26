@@ -5,6 +5,7 @@ import config from '../config'
 import ErrorModel from '../models/error.model'
 import ResponseModel from '../models/response.model'
 import { UserResponse } from '../models/user.model'
+import UserValidation from '../utils/userValidation'
 
 const UserMiddleware = {
 	checkRequestBody: (
@@ -20,6 +21,29 @@ const UserMiddleware = {
 				"Request body required with the 'username' and 'password' properties",
 				ReasonPhrases.BAD_REQUEST
 			)
+			response = {
+				data: errorModel.getData(),
+				date: new Date(),
+				status: StatusCodes.BAD_REQUEST,
+			}
+			return res.json(response)
+		}
+		next()
+	},
+	validationRequestBody: (
+		{ body }: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		const { password, username } = body
+		let error = UserValidation.lenght(username, 3, 40, 'Username')
+		error = error
+			? error
+			: UserValidation.lenght(password, 8, 64, 'Password')
+		if (error) {
+			res.status(StatusCodes.BAD_REQUEST)
+			let response: ResponseModel
+			const errorModel = new ErrorModel(error, ReasonPhrases.BAD_REQUEST)
 			response = {
 				data: errorModel.getData(),
 				date: new Date(),
