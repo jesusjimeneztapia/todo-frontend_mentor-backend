@@ -5,7 +5,6 @@ import UserMiddleware from '../middlewares/user.middleware'
 
 const UserRoute = Router()
 
-UserRoute.get(ROUTES.USER, UserMiddleware.verifyToken, UserController.login)
 UserRoute.post(
 	ROUTES.USER,
 	UserMiddleware.checkRequestBody,
